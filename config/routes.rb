@@ -5,4 +5,16 @@ Rails.application.routes.draw do
   delete '/logout', to: 'session#logout'
   get '/dashboard', to: 'session#dashboard'
 
+  resources :teams, only: [:index, :create, :update, :destroy]
+
+  resources :players, only: [:create, :update, :destroy]
+
+  resources :seasons, only: [:index, :show, :create, :update, :destroy]
+
+  resources :games, only: [:index, :show, :create, :update, :destroy]
+
+  resources :goals, only: [:create, :update, :destroy]
+
+  resources :penalties, only: [:create, :update, :destroy]
+
 end

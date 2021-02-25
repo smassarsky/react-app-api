@@ -4,8 +4,9 @@ class SessionController < ApplicationController
   def login
     command = AuthenticateUser.call(params[:username], params[:password])
     if command.success?
-      cookies.signed[:jwt] = {value: command.result, httponly: true, same_site: :strict}
-      render json: { username: params[:username] }
+      user = command.result[:user]
+      cookies.signed[:jwt] = {value: command.result[:token], httponly: true, same_site: :strict, expires: 1.hour.from_now}
+      render json: UserSerializer.new(user).to_serialized_json
     else
       render json: { error: "Unauthorized" }, status: :unauthorized
     end
@@ -15,8 +16,8 @@ class SessionController < ApplicationController
     user = User.new(user_params)
     if user.save
       jwt = JsonWebToken.encode(user_id: user.id)
-      cookies.signed[:jwt] = {value: jwt, httponly: true, same_site: :strict}
-      render json: { username: user.username}
+      cookies.signed[:jwt] = {value: jwt, httponly: true, same_site: :strict, expires: 1.hour.from_now}
+      render json: UserSerializer.new(user).to_serialized_json
     else
       render json: {error: user.errors.full_messages}, status: 422
     end
