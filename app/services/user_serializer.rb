@@ -6,7 +6,7 @@ class UserSerializer
 
   def to_serialized_json
     options = {
-      only: [:username, :name]
+      only: [:id, :username, :name]
     }
     @user.to_json(options)
   end

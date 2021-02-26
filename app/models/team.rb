@@ -7,8 +7,32 @@ class Team < ApplicationRecord
   has_many :seasons
   has_many :games, through: :seasons
 
+  belongs_to :current_season, optional: true
+
   has_many :goals
   has_many :penalties
 
   validates_presence_of :owner, :name
+  validates_uniqueness_of :name, scope: :owner_id
+
+  def owner_name
+    { owner_name: self.owner.name }
+  end
+
+  def current_season_name
+    self.current_season ? self.current_season.name : "-"
+  end
+
+  def current_record
+    self.current_season ? self.current_season.record : "-"
+  end
+
+  def next_game
+    self.current_season ? self.current_season.next_game : "-"
+  end
+
+  def last_game
+    self.current_season ? self.current_season.last_game : "-"
+  end
+
 end

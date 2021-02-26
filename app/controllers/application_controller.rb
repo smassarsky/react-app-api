@@ -13,7 +13,7 @@ class ApplicationController < ActionController::API
   end
 
   def owner?(thing)
-    @current_user == thing.user
+    @current_user == thing.owner
   end
 
   def exists_and_owner?(thing)
