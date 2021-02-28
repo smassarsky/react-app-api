@@ -4,6 +4,10 @@ class SeasonsController < ApplicationController
   end
 
   def show
+    season = Season.find_by(id: params[:id])
+    if season && exists_and_teammate?(season.team)
+      render json: SeasonSerializer.new(season).show_to_serialized_json
+    end
   end
 
   def create

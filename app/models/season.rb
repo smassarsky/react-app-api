@@ -2,6 +2,9 @@ class Season < ApplicationRecord
   belongs_to :team
   has_one :owner, through: :team
   has_many :games
+  has_many :players, through: :games
+  has_many :goals, through: :games
+  has_many :assists, through: :goals
 
   attr_accessor :current
 

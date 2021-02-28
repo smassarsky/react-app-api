@@ -40,10 +40,40 @@ class Player < ApplicationRecord
     stat_hash
   end
 
+  def stats_in_thing(thing)
+    stats_hash = {
+      games_played: thing.games.where(players: self).count,
+      goals: thing.goals.where(player: self).count,
+      assists: thing.assists.where(player: self).count
+    }
+    stats_hash[:points] = stats_hash[:goals] + stats_hash[:assists]
+    stats_hash
+  end
+
+  def as_json(options = {})
+    json_to_return = super
+    if options.has_key? :stats
+      stats = self.stats_in_thing(options[:stats])
+      json_to_return[:stats] = stats
+    end
+    json_to_return
+  end
+
   private
 
   def dont_delete_owner
     errors.add(:owner, "can't be deleted.") if owner == user
   end
 
+end
+
+
+def as_json(options = {})
+  json_to_return = super
+  if options.has_key? :translatedCity
+    city_translation = self.translatedCity(options[:translatedCity][:language])
+    json_to_return[:translatedCity] = city_translation
+  end
+
+  return json_to_return
 end

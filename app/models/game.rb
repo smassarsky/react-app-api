@@ -5,4 +5,7 @@ class Game < ApplicationRecord
   has_many :goals
   has_many :assists, through: :goals
   has_many :penalties
+
+  has_many :game_players
+  has_many :players, through: :game_players
 end
