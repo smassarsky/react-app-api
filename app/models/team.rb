@@ -7,7 +7,7 @@ class Team < ApplicationRecord
   has_many :seasons
   has_many :games, through: :seasons
 
-  belongs_to :current_season, optional: true
+  belongs_to :current_season, class_name: "Season", optional: true
 
   has_many :goals
   has_many :penalties

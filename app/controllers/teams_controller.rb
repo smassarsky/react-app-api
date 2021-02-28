@@ -6,6 +6,10 @@ class TeamsController < ApplicationController
   end
 
   def show
+    team = Team.find_by(id: params[:id])
+    if exists_and_teammate?(team)
+      render json: TeamSerializer.new(team).show_to_serialized_json
+    end
   end
 
   def create
@@ -14,7 +18,7 @@ class TeamsController < ApplicationController
     if team.save
       render json: TeamSerializer.new(team).index_to_serialized_json
     else
-      render json: {error: team.errors.full_messages}
+      render json: {error: team.errors.full_messages}, status: :bad_request
     end
   end
 
@@ -24,7 +28,7 @@ class TeamsController < ApplicationController
       if team.update(team_params)
         render json: TeamSerializer.new(team).index_to_serialized_json
       else
-        render json: {error: team.errors.full_messages}
+        render json: {error: team.errors.full_messages}, status: :bad_request
       end
     end
   end

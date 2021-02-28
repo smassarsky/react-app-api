@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   resources :teams, only: [:index, :show, :create, :update, :destroy]
 
-  resources :players, only: [:create, :update, :destroy]
+  resources :players, only: [:show, :create, :update, :destroy]
 
   resources :seasons, only: [:index, :show, :create, :update, :destroy]
 
