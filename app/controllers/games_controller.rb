@@ -7,7 +7,8 @@ class GamesController < ApplicationController
   end
 
   def create
-    season = Team.find_by(id: params[:game][:season_id])
+    season = Season.find_by(id: params[:game][:season_id])
+    byebug
     if exists_and_owner?(season)
       game = Game.new(game_params)
       if game.save

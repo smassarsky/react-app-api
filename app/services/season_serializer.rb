@@ -20,7 +20,8 @@ class SeasonSerializer
           only: [:id, :name, :owner_id]
         },
         games: {
-          only: [:id, :opponent, :datetime, :place, :win_loss, :status]
+          only: [:id, :opponent, :datetime, :place, :win_loss, :status],
+          methods: [:score]
         },
         players: {
           only: [:id, :name, :position, :jersey_num, :status],
