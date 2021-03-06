@@ -1,5 +1,7 @@
 class Penalty < ApplicationRecord
   belongs_to :game
+  has_one :owner, through: :game
+
   belongs_to :player
   belongs_to :team
   

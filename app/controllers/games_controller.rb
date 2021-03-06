@@ -4,6 +4,10 @@ class GamesController < ApplicationController
   end
 
   def show
+    game = Game.find_by(id: params[:id])
+    if exists_and_teammate?(game.team)
+      render json: GameSerializer.new(game).show_to_serialized_json
+    end
   end
 
   def create
