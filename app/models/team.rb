@@ -35,4 +35,13 @@ class Team < ApplicationRecord
     self.current_season ? self.current_season.last_game : "-"
   end
 
+  def roster
+    {
+      players: {
+        active: self.players.active,
+        inactive: self.players.inactive
+      }
+    }
+  end
+
 end

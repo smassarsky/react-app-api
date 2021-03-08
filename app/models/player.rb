@@ -24,6 +24,9 @@ class Player < ApplicationRecord
 
   after_initialize :set_defaults
 
+  scope :active, -> { where(status: 'Active')}
+  scope :inactive, -> { where(status: 'Inactive')}
+
   def set_defaults
     self.position ||= 'C'
     self.jersey_num ||= 0
@@ -50,10 +53,23 @@ class Player < ApplicationRecord
     stats_hash
   end
 
+  def stats_in_game(game)
+    stats_hash = {
+      goals: game.goals.by_player(self).count,
+      assists: game.assists.by_player(self).count,
+      pim: game.penalties.by_player(self).sum { |p| p.length }
+    }
+    stats_hash[:points] = stats_hash[:goals] + stats_hash[:assists]
+    stats_hash
+  end
+
   def as_json(options = {})
     json_to_return = super
     if options.has_key? :stats
       stats = self.stats_in_thing(options[:stats])
+      json_to_return[:stats] = stats
+    elsif options.has_key? :game_stats
+      stats = self.stats_in_game(options[:game_stats])
       json_to_return[:stats] = stats
     end
     json_to_return
@@ -65,15 +81,4 @@ class Player < ApplicationRecord
     errors.add(:owner, "can't be deleted.") if owner == user
   end
 
-end
-
-
-def as_json(options = {})
-  json_to_return = super
-  if options.has_key? :translatedCity
-    city_translation = self.translatedCity(options[:translatedCity][:language])
-    json_to_return[:translatedCity] = city_translation
-  end
-
-  return json_to_return
 end

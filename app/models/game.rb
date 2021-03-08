@@ -29,4 +29,43 @@ class Game < ApplicationRecord
     score_hash
   end
 
+  def team_stats
+
+  end
+
+  def player_stats(player)
+    stats_hash = {
+      goals: self.goals.by_player(player).count,
+      assists: self.assists.by_player(player).count,
+      pim: self.penalties.by_player(player).sum { |p| p.length }
+    }
+    stats_hash[:points] = stats_hash[:goals] + stats_hash[:assists]
+    stats_hash
+  end
+
+  def find_player_by_user(user)
+    player = self.team.players.find_by(user: user)
+    {
+      details: player,
+      attending: self.players.include?(player)
+    }
+  end
+
+  def as_json(options = {})
+    json_to_return = super
+    if options.has_key? :users_player
+      player = find_player_by_user(options[:users_player])
+      json_to_return[:users_player] = player
+    end
+    json_to_return
+  end
+
+  def players_list
+    PlayerSerializer.new(self.players, self).game_player_as_json
+  end
+
+  def players_with_stats
+    PlayerSerializer.new(self.players, self).game_player_as_json
+  end
+
 end

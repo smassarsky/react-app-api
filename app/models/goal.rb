@@ -12,6 +12,8 @@ class Goal < ApplicationRecord
   has_many :on_ices
   has_many :on_ice_players, through: :on_ices, foreign_key: "player_id"
 
-  scope :in_ot, -> { where("period > 3") }
+  scope :in_regulation, -> { where()}
+  scope :in_ot, -> { where("period > 3").where.not("period = 99") }
   scope :in_shootout, -> { where("period = 99") }
+  scope :by_player, ->(player) { where(player: player) }
 end

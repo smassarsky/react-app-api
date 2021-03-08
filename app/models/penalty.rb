@@ -6,4 +6,6 @@ class Penalty < ApplicationRecord
   belongs_to :team
   
   validates_presence_of :game_id, :team_id, :length
+
+  scope :by_player, ->(player) { where(player: player) }
 end
