@@ -4,7 +4,9 @@ class Game < ApplicationRecord
   has_one :team, through: :season
 
   has_many :goals
+  has_many :on_ice_players, through: :goals
   has_many :assists, through: :goals
+  has_many :assist_players, through: :assists
   has_many :penalties
 
   has_many :game_players
@@ -12,8 +14,8 @@ class Game < ApplicationRecord
 
   def score
     score_hash = {
-      us: goals.where(team: team).count,
-      opponent: goals.where.not(team: team).count
+      us: self.goals.where(team: team).count,
+      opponent: self.goals.where(team: nil).count
     }
     if status == "Final"
       if score_hash[:us] > score_hash[:opponent]
@@ -33,10 +35,18 @@ class Game < ApplicationRecord
 
   end
 
+  def events
+    {
+      goals: GoalSerializer.new(self.goals.order(period: :ASC, time: :ASC)).as_json,
+      penalties: PenaltySerializer.new(self.penalties.order(period: :ASC, time: :ASC)).as_json
+    }
+  end
+
   def player_stats(player)
     stats_hash = {
       goals: self.goals.by_player(player).count,
       assists: self.assists.by_player(player).count,
+      plus_minus: self.on_ice_players.where(goals: {team: self.team}, id: player).count - self.on_ice_players.where(goal: {team: nil}, id: player).count,
       pim: self.penalties.by_player(player).sum { |p| p.length }
     }
     stats_hash[:points] = stats_hash[:goals] + stats_hash[:assists]
@@ -52,6 +62,7 @@ class Game < ApplicationRecord
   end
 
   def as_json(options = {})
+    puts options
     json_to_return = super
     if options.has_key? :users_player
       player = find_player_by_user(options[:users_player])

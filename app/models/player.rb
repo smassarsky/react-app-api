@@ -57,6 +57,7 @@ class Player < ApplicationRecord
     stats_hash = {
       goals: game.goals.by_player(self).count,
       assists: game.assists.by_player(self).count,
+      plus_minus: game.on_ice_players.where(goals: {team: game.team}, id: self).count - game.on_ice_players.where(goals: {team: nil}, id: self).count,
       pim: game.penalties.by_player(self).sum { |p| p.length }
     }
     stats_hash[:points] = stats_hash[:goals] + stats_hash[:assists]

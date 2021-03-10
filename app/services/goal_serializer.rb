@@ -11,23 +11,39 @@ class GoalSerializer
         player: {
           only: [:id, :name]
         },
-        assists: {
-          include: {
-            player: {
-              only: [:id, :name]
-            }
-          }
+        team: {
+          only: [:id, :name]
         },
-        on_ices: {
-          include: {
-            player: {
-              only: [:id, :name]
-            }
-          }
+        assist_players: {
+          only: [:id, :name]
+        },
+        on_ice_players: {
+          only: [:id, :name]
         }
       }
     }
     @goal.to_json(options)
+  end
+
+  def as_json
+    options = {
+      only: [:id, :period, :time],
+      include: {
+        player: {
+          only: [:id, :name]
+        },
+        team: {
+          only: [:id, :name]
+        },
+        assist_players: {
+          only: [:id, :name]
+        },
+        on_ice_players: {
+          only: [:id, :name]
+        }
+      }
+    }
+    @goal.as_json(options)
   end
 
 end

@@ -34,7 +34,7 @@ class GoalsController < ApplicationController
   private
 
   def goal_params
-    params.require(:goal).permit(:game_id, :player_id, :team_id, :period, :time)
+    params.require(:goal).permit(:game_id, :player_id, :team_id, :period, :time, :assist_player_ids => [], :on_ice_player_ids => [])
   end
 
 end

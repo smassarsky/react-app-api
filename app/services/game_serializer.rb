@@ -15,6 +15,7 @@ class GameSerializer
 
   def show_to_serialized_json
     puts @game
+    puts @user
     options = {
       only: [:id, :datetime, :opponent, :status, :place],
       include: {
@@ -24,19 +25,14 @@ class GameSerializer
             player: {
               only: [:id, :name]
             },
-            assists: {
-              include: {
-                player: {
-                  only: [:id, :name]
-                }
-              }
+            team: {
+              only: [:id, :name]
             },
-            on_ices: {
-              include: {
-                player: {
-                  only: [:id, :name]
-                }
-              }
+            assist_players: {
+              only: [:id, :name]
+            },
+            on_ice_players: {
+              only: [:id, :name]
             }
           }
         },
@@ -62,7 +58,7 @@ class GameSerializer
           only: [:id]
         }
       },
-      methods: [:score, :players_list],
+      methods: [:score, :events, :players_list],
       users_player: @user
     }
     @game.to_json(options)

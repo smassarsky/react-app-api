@@ -37,10 +37,8 @@ class Team < ApplicationRecord
 
   def roster
     {
-      players: {
-        active: self.players.active,
-        inactive: self.players.inactive
-      }
+      active: PlayerSerializer.new(self.players.active).roster_as_json,
+      inactive: PlayerSerializer.new(self.players.inactive).roster_as_json
     }
   end
 

@@ -39,4 +39,11 @@ class PlayerSerializer
     @player.as_json(options)
   end
 
+  def roster_as_json
+    options = {
+      only: [:id, :name, :position]
+    }
+    @player.as_json(options)
+  end
+
 end

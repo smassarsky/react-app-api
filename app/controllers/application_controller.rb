@@ -30,7 +30,7 @@ class ApplicationController < ActionController::API
   end
 
   def exists_and_teammate?(team)
-    if team && team.users.include?(@current_user)
+    if team && team.users.find_by(id: @current_user.id)
       return true
     elsif team
       render json: { error: "Not Authorized"}, status: 403

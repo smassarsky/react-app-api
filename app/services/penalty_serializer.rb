@@ -1,6 +1,6 @@
 class PenaltySerializer
 
-  def initializer(penalty_obj)
+  def initialize(penalty_obj)
     @penalty = penalty_obj
   end
 
@@ -17,6 +17,21 @@ class PenaltySerializer
       }
     }
     @penalty.to_json(options)
+  end
+
+  def as_json
+    options = {
+      only: [:id, :period, :time, :length, :infraction],
+      include: {
+        player: {
+          only: [:id, :name]
+        },
+        team: {
+          only: [:id, :name]
+        }
+      }
+    }
+    @penalty.as_json(options)
   end
 
 end
