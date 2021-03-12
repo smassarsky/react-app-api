@@ -27,7 +27,8 @@ class SeasonSerializer
           only: [:id, :name, :position, :jersey_num, :status],
           stats: @season
         }
-      }
+      },
+      methods: [:players_list]
     }
     @season.to_json(options)
   end

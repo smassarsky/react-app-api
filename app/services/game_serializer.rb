@@ -19,34 +19,6 @@ class GameSerializer
     options = {
       only: [:id, :datetime, :opponent, :status, :place],
       include: {
-        goals: {
-          only: [:id, :period, :time],
-          include: {
-            player: {
-              only: [:id, :name]
-            },
-            team: {
-              only: [:id, :name]
-            },
-            assist_players: {
-              only: [:id, :name]
-            },
-            on_ice_players: {
-              only: [:id, :name]
-            }
-          }
-        },
-        penalties: {
-          only: [:id, :period, :time, :length, :infraction],
-          include: {
-            player: {
-              only: [:id, :name]
-            },
-            team: {
-              only: [:id, :name]
-            }
-          }
-        },
         team: {
           only: [:id, :name],
           methods: [:roster]

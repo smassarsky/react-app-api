@@ -64,6 +64,20 @@ class Player < ApplicationRecord
     stats_hash
   end
 
+  def season_stats(season)
+    puts season
+    puts season.players
+    stats_hash = {
+      games_played: season.players.where(id: self).count,
+      goals: season.goals.by_player(self).count,
+      assists: season.assists.by_player(self).count,
+      plus_minus: season.on_ice_players.where(goals: {team: self.team}, id: self).count - season.on_ice_players.where(goals: {team: nil}, id: self).count,
+      pim: season.penalties.by_player(self).sum { |p| p.length }
+    }
+    stats_hash[:points] = stats_hash[:goals] + stats_hash[:assists]
+    stats_hash
+  end
+
   def as_json(options = {})
     json_to_return = super
     if options.has_key? :stats
@@ -71,6 +85,9 @@ class Player < ApplicationRecord
       json_to_return[:stats] = stats
     elsif options.has_key? :game_stats
       stats = self.stats_in_game(options[:game_stats])
+      json_to_return[:stats] = stats
+    elsif options.has_key? :season_stats
+      stats = self.season_stats(options[:season_stats])
       json_to_return[:stats] = stats
     end
     json_to_return

@@ -3,8 +3,12 @@ class Season < ApplicationRecord
   has_one :owner, through: :team
   has_many :games
   has_many :players, through: :games
+
   has_many :goals, through: :games
   has_many :assists, through: :goals
+  has_many :on_ice_players, through: :goals
+
+  has_many :penalties, through: :games
 
   attr_accessor :current
 
@@ -36,6 +40,22 @@ class Season < ApplicationRecord
 
   def last_game
 
+  end
+
+  def stats(player)
+    stats_hash = {
+      games_played: self.players.where(id: player.id).count,
+      goals: self.goals.where(player: player).count,
+      assists: self.assists.where(player: player).count,
+      plus_minus: self.on_ice_players.where(goals: {team: self.team}, id: player).count - self.on_ice_players.where(goals: {team: nil}, id: player).count,
+      pim: self.penalties.by_player(player).sum{ |penalty| penalty.length }
+    }
+    stats_hash[:points] = stats_hash[:goals] + stats_hash[:assists]
+    stats_hash
+  end
+
+  def players_list
+    PlayerSerializer.new(self.players.uniq, self).aggregate_stats_as_json
   end
 
 end

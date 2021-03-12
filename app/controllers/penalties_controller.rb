@@ -7,18 +7,18 @@ class PenaltiesController < ApplicationController
       if penalty.save
         render json: PenaltySerializer.new(penalty).to_serialized_json
       else
-        render json: { error: penalty.errors.full_messages }
+        render json: { error: penalty.errors.full_messages }, status: :bad_request
       end
     end
   end
 
   def update
-    penalty = Penalty.find_by(id: params[:id)
+    penalty = Penalty.find_by(id: params[:id])
     if exists_and_owner?(penalty)
       if penalty.update(penalty_params)
         render json: PenaltySerializer.new(penalty).to_serialized_json
       else
-        render json: { error: penalty.errors.full_messages }
+        render json: { error: penalty.errors.full_messages }, status: :bad_request
       end
     end
   end
