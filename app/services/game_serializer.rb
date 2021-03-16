@@ -13,6 +13,21 @@ class GameSerializer
     @game.to_json(options)
   end
 
+  def next_game_as_json
+    options = {
+      only: [:id, :datetime, :opponent, :place]
+    }
+    @game.as_json(options)
+  end
+
+  def last_game_as_json
+    options = {
+      only: [:id, :datetime, :opponent, :place],
+      methods: [:score]
+    }
+    @game.as_json(options)
+  end
+
   def show_to_serialized_json
     puts @game
     puts @user

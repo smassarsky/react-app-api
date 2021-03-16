@@ -20,19 +20,19 @@ class Team < ApplicationRecord
   end
 
   def current_season_name
-    self.current_season ? self.current_season.name : "-"
+    self.current_season ? self.current_season.name : nil
   end
 
   def current_record
-    self.current_season ? self.current_season.record : "-"
+    self.current_season ? self.current_season.record : nil
   end
 
   def next_game
-    self.current_season ? self.current_season.next_game : "-"
+    self.current_season ? self.current_season.next_game : nil
   end
 
   def last_game
-    self.current_season ? self.current_season.last_game : "-"
+    self.current_season ? self.current_season.last_game : nil
   end
 
   def roster

@@ -65,8 +65,6 @@ class Player < ApplicationRecord
   end
 
   def season_stats(season)
-    puts season
-    puts season.players
     stats_hash = {
       games_played: season.players.where(id: self).count,
       goals: season.goals.by_player(self).count,

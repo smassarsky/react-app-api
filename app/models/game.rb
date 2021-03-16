@@ -12,21 +12,39 @@ class Game < ApplicationRecord
   has_many :game_players
   has_many :players, through: :game_players
 
+  scope :to_be_played, -> { where('datetime > ? AND status = ?', DateTime.now, 'TBP')}
+  scope :final, -> { where('datetime < ? AND status = ?', DateTime.now, "Final")}
+
+  before_save :set_win_loss
+
+  def set_win_loss
+    puts 'hi'
+    if status == "Final"
+      us = self.goals.where(team: team).count
+      them = self.goals.where(team: nil).count
+      if us == them
+        self.win_loss = "T"
+      elsif us > them
+        self.win_loss = "W"
+      elsif goals.in_shootout.count > 0
+        self.win_loss = "SOL"
+      elsif goals.in_ot.count > 0
+        self.win_loss = "OTL"
+      else
+        self.win_loss = "L"
+      end
+    else
+      self.win_loss = nil
+    end
+  end
+
   def score
     score_hash = {
       us: self.goals.where(team: team).count,
       opponent: self.goals.where(team: nil).count
     }
     if status == "Final"
-      if score_hash[:us] > score_hash[:opponent]
-        score_hash[:outcome] = "Win"
-      elsif goals.in_shootout.count > 0
-        score_hash[:outcome] = "S/O Loss"
-      elsif goals.in_ot.count > 0
-        score_hash[:outcome] = "OT Loss"
-      else
-        score_hash[:outcome] = "Loss"
-      end
+      score_hash[:outcome] = self.win_loss
     end
     score_hash
   end

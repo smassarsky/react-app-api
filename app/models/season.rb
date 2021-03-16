@@ -28,18 +28,30 @@ class Season < ApplicationRecord
   end
 
   def record
-    wins = self.games.where(win_loss: "win").count
-    losses = self.games.where(win_loss: "loss").count
-    otl = self.games.where(win_loss: "otl").count
-    "#{wins} - #{losses} - #{otl}"
+    {
+      w: self.games.where(win_loss: "W").count,
+      l: self.games.where(win_loss: "L").count,
+      t: self.games.where(win_loss: "T").count,
+      otl: self.games.where(win_loss: ["OTL", "SOL"]).count
+    }
   end
 
   def next_game
-
+    temp = self.games.to_be_played.order(datetime: :asc).limit(1)
+    if temp.length == 1
+      return GameSerializer.new(temp[0]).next_game_as_json
+    else
+      return nil
+    end
   end
 
   def last_game
-
+    temp = self.games.final.order(datetime: :desc).limit(1)
+    if temp.length == 1
+      return GameSerializer.new(temp[0]).last_game_as_json
+    else
+      return nil
+    end
   end
 
   def stats(player)
