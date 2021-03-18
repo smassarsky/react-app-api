@@ -8,6 +8,11 @@ class PlayerSerializer
   def to_serialized_json
     options = {
       only: [:id, :name, :position, :jersey_num, :status],
+      include: {
+        user: {
+          only: [:id, :name]
+        }
+      },
       methods: [:stats]
     }
     @player.to_json(options)
