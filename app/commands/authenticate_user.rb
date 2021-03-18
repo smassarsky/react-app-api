@@ -9,6 +9,7 @@ class AuthenticateUser
   def call
     @user = user
     if @user
+      puts @user
       return {user: @user, token: JsonWebToken.encode(user_id: @user.id)}
     else
       return nil
