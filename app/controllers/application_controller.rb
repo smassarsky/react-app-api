@@ -9,9 +9,7 @@ class ApplicationController < ActionController::API
 
   def authenticate_request
     jwt = cookies.signed[:jwt]
-    puts 'auth request', jwt
     @current_user = AuthorizeApiRequest.call(jwt).result
-    puts 'have current user', @current_user
     render json: { error: 'Not Authorized' }, status: 401 unless @current_user
   end
 

@@ -29,8 +29,6 @@ class GameSerializer
   end
 
   def show_to_serialized_json
-    puts @game
-    puts @user
     options = {
       only: [:id, :datetime, :opponent, :status, :place],
       include: {

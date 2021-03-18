@@ -2,8 +2,6 @@ class AuthorizeApiRequest
   prepend SimpleCommand
 
   def initialize(token = nil)
-    puts 'token?'
-    puts token
     @token = token
   end
 
@@ -21,10 +19,7 @@ class AuthorizeApiRequest
   end
 
   def decoded_auth_token
-    puts @token
-    puts JsonWebToken.decode(@token)
     @decoded_auth_token ||= JsonWebToken.decode(token)
-    puts @decoded_auth_token
     @decoded_auth_token
   end
 

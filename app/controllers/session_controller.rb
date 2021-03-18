@@ -6,8 +6,6 @@ class SessionController < ApplicationController
     if command.success?
       user = command.result[:user]
       cookies.signed[:jwt] = {value: command.result[:token], httponly: true, same_site: :none, secure: true, expires: 1.hour.from_now}
-      puts command.result[:token]
-      puts JsonWebToken.decode(command.result[:token])
       render json: UserSerializer.new(user).to_serialized_json
     else
       render json: { error: "Unauthorized" }, status: :unauthorized

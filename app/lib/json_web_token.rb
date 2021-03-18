@@ -2,7 +2,6 @@ class JsonWebToken
   class << self
     def encode(payload, exp = 24.hours.from_now)
       payload[:exp] = exp.to_i
-      puts 'hi from jwt', ENV["RAILS_MASTER_KEY"]
       JWT.encode(payload, ENV["RAILS_MASTER_KEY"])
     end
  

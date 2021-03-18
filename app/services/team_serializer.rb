@@ -42,8 +42,6 @@ class TeamSerializer
     if @user
       options[:include][:players][:include][:player_code] = { only: [:code] }
     end
-    puts @user
-    puts options
     @team.to_json(options)
   end
 

@@ -18,7 +18,6 @@ class Game < ApplicationRecord
   before_save :set_win_loss
 
   def set_win_loss
-    puts 'hi'
     if status == "Final"
       us = self.goals.where(team: team).count
       them = self.goals.where(team: nil).count
@@ -80,7 +79,6 @@ class Game < ApplicationRecord
   end
 
   def as_json(options = {})
-    puts options
     json_to_return = super
     if options.has_key? :users_player
       player = find_player_by_user(options[:users_player])
