@@ -8,7 +8,11 @@ class TeamsController < ApplicationController
   def show
     team = Team.find_by(id: params[:id])
     if exists_and_teammate?(team)
-      render json: TeamSerializer.new(team).show_to_serialized_json
+      if owner?(team)
+        render json: TeamSerializer.new(team, @current_user).show_to_serialized_json
+      else
+        render json: TeamSerializer.new(team).show_to_serialized_json
+      end
     end
   end
 

@@ -1,7 +1,8 @@
 class TeamSerializer
 
-  def initialize(team_obj)
+  def initialize(team_obj, user_obj = nil)
     @team = team_obj
+    @user = user_obj
   end
 
   def index_to_serialized_json
@@ -29,10 +30,20 @@ class TeamSerializer
         },
         players: {
           only: [:id, :name, :position, :jersey_num, :status],
-          methods: [:stats]
+          methods: [:stats],
+          include: {
+            user: {
+              only: [:id, :name]
+            }
+          }
         }
       }
     }
+    if @user
+      options[:include][:players][:include][:player_code] = { only: [:code] }
+    end
+    puts @user
+    puts options
     @team.to_json(options)
   end
 

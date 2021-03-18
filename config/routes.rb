@@ -20,4 +20,8 @@ Rails.application.routes.draw do
 
   resources :penalties, only: [:create, :update, :destroy]
 
+  post '/create-code', to: 'player_codes#create'
+  get '/player-codes/:code', to: 'player_codes#show'
+  post '/link-code', to: 'player_codes#link'
+
 end
