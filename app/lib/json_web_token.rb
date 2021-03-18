@@ -7,7 +7,7 @@ class JsonWebToken
     end
  
     def decode(token)
-      body = JWT.decode(token, ENV["RAILS_MASTER_KEY"])
+      body = JWT.decode(token, ENV["RAILS_MASTER_KEY"])[0]
       HashWithIndifferentAccess.new body
     rescue
       nil
