@@ -16,7 +16,7 @@ class SessionController < ApplicationController
     user = User.new(user_params)
     if user.save
       jwt = JsonWebToken.encode(user_id: user.id)
-      cookies.signed[:jwt] = {value: jwt, httponly: true, same_site: :none, expires: 1.hour.from_now}
+      cookies.signed[:jwt] = {value: jwt, httponly: true, same_site: :none, secure: true, expires: 1.hour.from_now}
       render json: UserSerializer.new(user).to_serialized_json
     else
       render json: {error: user.errors.full_messages}, status: 422
