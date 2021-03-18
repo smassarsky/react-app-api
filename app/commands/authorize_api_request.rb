@@ -2,6 +2,8 @@ class AuthorizeApiRequest
   prepend SimpleCommand
 
   def initialize(token = nil)
+    puts 'token?'
+    puts token
     @token = token
   end
 
