@@ -22,7 +22,7 @@ class AuthorizeApiRequest
 
   def decoded_auth_token
     puts @token
-    puts JsonWebToken.decode(token)
+    puts JsonWebToken.decode(@token)
     @decoded_auth_token ||= JsonWebToken.decode(token)
     puts @decoded_auth_token
     @decoded_auth_token
