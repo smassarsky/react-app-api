@@ -19,7 +19,6 @@ class PlayerCodesController < ApplicationController
   end
 
   def link
-    byebug
     if set_code_and_checks
       player = @player_code.player
       player.user = @current_user
