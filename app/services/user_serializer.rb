@@ -11,4 +11,12 @@ class UserSerializer
     @user.to_json(options)
   end
 
+  def dashboard_to_serialized_json
+    options = {
+      only: [],
+      methods: [:upcoming_games, :recent_games]
+    }
+    @user.to_json(options)
+  end
+
 end

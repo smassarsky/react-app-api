@@ -1,7 +1,7 @@
 class Season < ApplicationRecord
   belongs_to :team
   has_one :owner, through: :team
-  has_many :games
+  has_many :games, -> { order(datetime: :asc) }
   has_many :players, through: :games
 
   has_many :goals, through: :games
@@ -37,18 +37,18 @@ class Season < ApplicationRecord
   end
 
   def next_game
-    temp = self.games.to_be_played.order(datetime: :asc).limit(1)
-    if temp.length == 1
-      return GameSerializer.new(temp[0]).next_game_as_json
+    temp = self.games.to_be_played.first
+    if temp
+      return GameSerializer.new(temp).next_game_as_json
     else
       return nil
     end
   end
 
   def last_game
-    temp = self.games.final.order(datetime: :desc).limit(1)
-    if temp.length == 1
-      return GameSerializer.new(temp[0]).last_game_as_json
+    temp = self.games.final.last
+    if temp
+      return GameSerializer.new(temp).last_game_as_json
     else
       return nil
     end

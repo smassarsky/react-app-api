@@ -49,4 +49,39 @@ class GameSerializer
     @game.to_json(options)
   end
 
+  def upcoming_as_json
+    options = {
+      only: [:id, :datetime, :opponent, :place],
+      include: {
+        team: {
+          only: [:id, :name],
+          include: {
+            owner: {
+              only: [:id, :name]
+            }
+          }
+        }
+      }
+    }
+    @game.as_json(options)
+  end
+
+  def recent_as_json
+    options = {
+      only: [:id, :datetime, :opponent, :place],
+      include: {
+        team: {
+          only: [:id, :name],
+          include: {
+            owner: {
+              only: [:id, :name]
+            }
+          }
+        }
+      },
+      methods: [:score]
+    }
+    @game.as_json(options)
+  end
+
 end
