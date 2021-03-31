@@ -6,6 +6,6 @@ This is the backend for an application where a hockey team can keep track of the
 
 *Please allow a moment for the Heroku server to spin up, once on first visit and again on login / signup.
 
-[Backend Repo](https://github.com/smassarsky/react-app-frontend)
+[Frontend Repo](https://github.com/smassarsky/react-app-frontend)
 
 [LinkedIn](https://www.linkedin.com/in/seth-massarsky/)
