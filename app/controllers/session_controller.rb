@@ -7,10 +7,10 @@ class SessionController < ApplicationController
       user = command.result[:user]
 
       # for dev
-      #cookies.signed[:jwt] = {value: command.result[:token], httponly: true, same_site: :strict, expires: 1.hour.from_now}
+      cookies.signed[:jwt] = {value: command.result[:token], httponly: true, same_site: :strict, expires: 1.hour.from_now}
 
       # for heroku
-      cookies.signed[:jwt] = {value: command.result[:token], httponly: true, same_site: :none, secure: true, expires: 1.hour.from_now}
+      #cookies.signed[:jwt] = {value: command.result[:token], httponly: true, same_site: :none, secure: true, expires: 1.hour.from_now}
 
       render json: UserSerializer.new(user).to_serialized_json
     else
@@ -23,11 +23,11 @@ class SessionController < ApplicationController
     if user.save
       jwt = JsonWebToken.encode(user_id: user.id)
 
-      # for def
-      #cookies.signed[:jwt] = {value: jwt, httponly: true, same_site: :strict, expires: 1.hour.from_now}
+      # for dev
+      cookies.signed[:jwt] = {value: jwt, httponly: true, same_site: :strict, expires: 1.hour.from_now}
 
       # for heroku
-      cookies.signed[:jwt] = {value: jwt, httponly: true, same_site: :none, secure: true, expires: 1.hour.from_now}
+      #cookies.signed[:jwt] = {value: jwt, httponly: true, same_site: :none, secure: true, expires: 1.hour.from_now}
 
       render json: UserSerializer.new(user).to_serialized_json
     else
